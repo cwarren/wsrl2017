@@ -10,9 +10,13 @@ Game.UIMode.gameStart = {
   render: function (display) {
     console.log("rendered gameStart");
     display.drawText(5,5,"game start mode");
+    display.drawText(5,6,"press any key to play");
   },
   handleInput: function (inputType,inputData) {
     console.log("input for gameStart");
+    if (inputData.charCode !== 0) { // ignore the various modding keys - control, shift, etc.
+      Game.switchUIMode(Game.UIMode.gamePlay);
+    }
   }
 };
 

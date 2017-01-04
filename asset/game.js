@@ -12,6 +12,15 @@ window.onload = function() {
         document.getElementById('wsrl-main-display').appendChild(Game.getDisplay('main').getContainer());
         document.getElementById('wsrl-message-display').appendChild(Game.getDisplay('message').getContainer());
         
+        var bindEventToScreen = function(eventType) {
+            window.addEventListener(eventType, function(evt) {
+              Game.eventHandler(eventType, evt);
+            });
+        };
+        // Bind keyboard input events
+        bindEventToScreen('keypress');
+        bindEventToScreen('keydown');
+        
         Game.switchUIMode(Game.UIMode.gameStart);
     }
 };
@@ -58,6 +67,12 @@ var Game = {
     this.renderAll();
   },
 
+  eventHandler: function(eventType, evt) {
+    if (this._curUIMode) {
+      this._curUIMode.handleInput(eventType, evt);
+    }
+  },
+
   getDisplay: function (displayId) {
     if (this.display.hasOwnProperty(displayId)) {
       return this.display[displayId].o;
@@ -75,6 +90,7 @@ var Game = {
     d.drawText(2,2,"avatar display");
   },
   renderMain: function() {
+    this.getDisplay("main").clear();
     if (this._curUIMode) {
       this._curUIMode.render(this.getDisplay("main"));
     }
