@@ -1,5 +1,3 @@
-console.log("game.js loaded");
-
 window.onload = function() {
     console.log("starting WSRL - window loaded");
     // Check if rot.js can work on this browser
@@ -8,30 +6,46 @@ window.onload = function() {
     } else {
         // Initialize the game
         Game.init();
-        
-        document.getElementById('wsrl-main-display').appendChild(
-           Game.display.main.o.getContainer());
+
+        // Add the containers to our HTML page
+        document.getElementById('wsrl-main-display').appendChild(Game.getDisplay('main').getContainer());
     }
 };
 
 var Game = {
+
+  _randomSeed: 0,
+  
   display: {
+    SPACING: 1.1,
     main: {
       w: 80,
       h: 24,
       o: null
     }
   },
+
   init: function() {
-    console.log("game init");
-    this.display.main.o = new ROT.Display(
-      {width: this.display.main.w,
-       height: this.display.main.h,
-      }
-     );
-     
+    this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    //this._randomSeed = 76250;
+    console.log("using random seed "+this._randomSeed);
+    ROT.RNG.setSeed(this._randomSeed);
+
+    this.display.main.o = new ROT.Display({width: this.display.main.w, height: this.display.main.h, spacing: Game.display.SPACING});
+    this.renderMain();
+  },
+
+  getDisplay: function (displayId) {
+    if (this.display.hasOwnProperty(displayId)) {
+      return this.display[displayId].o;
+    }
+    return null;
+  },
+
+  renderMain: function() {
+    var d = this.getDisplay("main");
     for (var i = 0; i < 10; i++) {
-      this.display.main.o.drawText(5,i+5,"hello world");
-    } 
+      d.drawText(5,i+5,"hello world");
+    }
   }
 };
