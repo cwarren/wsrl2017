@@ -30,9 +30,20 @@ Game.UIMode.gamePlay = {
   render: function (display) {
     console.log("rendered gamePlay");
     display.drawText(5,5,"game play mode");
+    display.drawText(5,7,"W to win, L to lose, anything else to keep on keeping on");
   },
   handleInput: function (inputType,inputData) {
     console.log("input for gamePlay");
+    console.log(inputType);
+    console.dir(inputData);
+    if (inputType == 'keypress') {
+      if (((inputData.key == 'w') || (inputData.key == 'W')) && (inputData.shiftKey)) {
+        Game.switchUIMode(Game.UIMode.gameWin);
+      }
+      else if (((inputData.key == 'l') || (inputData.key == 'L')) && (inputData.shiftKey)) {
+        Game.switchUIMode(Game.UIMode.gameLose);
+      }
+    }
   }
 };
 
