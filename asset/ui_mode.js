@@ -1,5 +1,10 @@
 Game.UIMode = {};
 
+Game.UIMode.DEFAULT_FG = '#fff';
+Game.UIMode.DEFAULT_BG = '#000';
+
+//############################################################################
+
 Game.UIMode.gameStart = {
   enter: function () {
     console.log("entered gameStart");
@@ -20,6 +25,8 @@ Game.UIMode.gameStart = {
     }
   }
 };
+
+//############################################################################
 
 Game.UIMode.gamePersistence = {
   enter: function () {
@@ -51,12 +58,13 @@ Game.UIMode.gamePersistence = {
         var state_data = JSON.parse(json_state_data);
         // console.dir(state_data);
         Game.setRandomSeed(state_data._randomSeed);
-        
+        Game.UIMode.gamePlay.setupPlay();
         Game.switchUIMode(Game.UIMode.gamePlay);
       }
       
       else if (((inputData.key == 'n') || (inputData.key == 'N')) && (inputData.shiftKey)) {
         Game.setRandomSeed(5 + Math.floor(ROT.RNG.getUniform()*100000));
+        Game.UIMode.gamePlay.setupPlay();
         Game.switchUIMode(Game.UIMode.gamePlay);
       }
     }
@@ -75,7 +83,12 @@ Game.UIMode.gamePersistence = {
   }  
 };
 
+//############################################################################
+
 Game.UIMode.gamePlay = {
+  attr: {
+    _map: null
+  },
   enter: function () {
     console.log("entered gamePlay");
     Game.Message.send("...game on...");
@@ -88,6 +101,7 @@ Game.UIMode.gamePlay = {
     display.drawText(5,5,"game play mode");
     display.drawText(5,7,"W to win, L to lose, anything else to keep on keeping on");
     display.drawText(5,9,"= to save, load, or start over");
+    this.attr._map.renderOn(display);
   },
   handleInput: function (inputType,inputData) {
     console.log("input for gamePlay");
@@ -104,8 +118,26 @@ Game.UIMode.gamePlay = {
         Game.switchUIMode(Game.UIMode.gamePersistence);
       }
     }
+  },
+  setupPlay: function() {
+    var generator = new ROT.Map.Cellular(80,24);
+    generator.randomize(.5);
+    for (var i=0;i<3;i++) {
+      generator.create();
+    }
+    var tileArray = Game.util.init2DArray(80,24,Game.Tile.nullTile);
+    generator.create(function(x,y,val) {
+      if (val === 1) {
+        tileArray[x][y] = Game.Tile.floorTile;
+      } else {
+        tileArray[x][y] = Game.Tile.wallTile;
+      }
+    });
+    this.attr._map = new Game.Map(tileArray);
   }
 };
+
+//############################################################################
 
 Game.UIMode.gameWin = {
   enter: function () {
@@ -123,6 +155,8 @@ Game.UIMode.gameWin = {
     console.log("input for gameWin");
   }
 };
+
+//############################################################################
 
 Game.UIMode.gameLose = {
   enter: function () {
