@@ -26,7 +26,7 @@ window.onload = function() {
 };
 
 var Game = {
-
+  PERSISTANCE_NAMESPACE: 'wsrlsavegame',
   _randomSeed: 0,
   _DISPLAY_SPACING: 1.1,
   display: {
@@ -48,8 +48,10 @@ var Game = {
   },
 
   _curUIMode: null,
+  theGame: null,
   
   init: function() {
+    this.theGame = this;
     this.setRandomSeed(5 + Math.floor(Math.random()*100000));
     //this._randomSeed = 76250;
 
@@ -118,5 +120,10 @@ var Game = {
     this._curUIMode.enter();
     // render everything
     this.renderAll();
+  },
+  
+  toJSON: function() {
+    var json = {"_randomSeed":this.getRandomSeed()};
+    return json;
   }
 };

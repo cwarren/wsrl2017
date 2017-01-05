@@ -35,10 +35,44 @@ Game.UIMode.gamePersistence = {
   },
   handleInput: function (inputType,inputData) {
     console.log("input for gamePersistence");
-    if (inputData.charCode !== 0) { // ignore the various modding keys - control, shift, etc.
-      Game.switchUIMode(Game.UIMode.gamePlay);
+
+    if (inputType == 'keypress') {
+      if (((inputData.key == 's') || (inputData.key == 'S')) && (inputData.shiftKey)) {
+        // console.dir(JSON.stringify(Game.theGame));
+        if (this.localStorageAvailable()) {
+          window.localStorage.setItem(Game.PERSISTANCE_NAMESPACE, JSON.stringify(Game.theGame)); // .toJSON()
+          Game.switchUIMode(Game.UIMode.gamePlay);
+        }
+      }
+      
+      else if (((inputData.key == 'l') || (inputData.key == 'L')) && (inputData.shiftKey)) {
+        var  json_state_data = window.localStorage.getItem(Game.PERSISTANCE_NAMESPACE); //'{"randomSeed":12}';
+        console.log(json_state_data);
+        var state_data = JSON.parse(json_state_data);
+        // console.dir(state_data);
+        Game.setRandomSeed(state_data._randomSeed);
+        
+        Game.switchUIMode(Game.UIMode.gamePlay);
+      }
+      
+      else if (((inputData.key == 'n') || (inputData.key == 'N')) && (inputData.shiftKey)) {
+        Game.setRandomSeed(5 + Math.floor(ROT.RNG.getUniform()*100000));
+        Game.switchUIMode(Game.UIMode.gamePlay);
+      }
     }
-  }
+  },
+  localStorageAvailable: function () { // NOTE: see https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+  	try {
+  		var x = '__storage_test__';
+  		window.localStorage.setItem(x, x);
+  		window.localStorage.removeItem(x);
+  		return true;
+  	}
+  	catch(e) {
+      Game.Message.send('Sorry, no local data storage is available for this browser');
+  		return false;
+  	}
+  }  
 };
 
 Game.UIMode.gamePlay = {
