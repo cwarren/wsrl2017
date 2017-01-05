@@ -22,7 +22,6 @@ window.onload = function() {
         bindEventToScreen('keydown');
         
         Game.switchUIMode(Game.UIMode.gameStart);
-        Game.Message.send("Game started");
     }
 };
 

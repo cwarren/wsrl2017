@@ -3,6 +3,7 @@ Game.UIMode = {};
 Game.UIMode.gameStart = {
   enter: function () {
     console.log("entered gameStart");
+    Game.Message.send("Welcome to WSRL, the game you never knew you needed");
   },
   exit: function () {
     console.log("exited gameStart");
@@ -23,6 +24,7 @@ Game.UIMode.gameStart = {
 Game.UIMode.gamePlay = {
   enter: function () {
     console.log("entered gamePlay");
+    Game.Message.send("...game on...");
   },
   exit: function () {
     console.log("exited gamePlay");
@@ -50,6 +52,7 @@ Game.UIMode.gamePlay = {
 Game.UIMode.gameWin = {
   enter: function () {
     console.log("entered gameWin");
+    Game.Message.send("Congratulations!");
   },
   exit: function () {
     console.log("exited gameWin");
@@ -66,6 +69,7 @@ Game.UIMode.gameWin = {
 Game.UIMode.gameLose = {
   enter: function () {
     console.log("entered gameLose");
+    Game.Message.send("So sorry - try again!");
   },
   exit: function () {
     console.log("exited gameLose");

@@ -10,5 +10,6 @@ Game.Message = {
   },
   clear: function () {
     this._curMessage = '';
+    Game.renderMessage();
   }
 };
