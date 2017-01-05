@@ -16,6 +16,26 @@ Game.UIMode.gameStart = {
   handleInput: function (inputType,inputData) {
     console.log("input for gameStart");
     if (inputData.charCode !== 0) { // ignore the various modding keys - control, shift, etc.
+      Game.switchUIMode(Game.UIMode.gamePersistence);
+    }
+  }
+};
+
+Game.UIMode.gamePersistence = {
+  enter: function () {
+    console.log("entered gamePersistence");
+    Game.Message.send("save, restore, or new game");
+  },
+  exit: function () {
+    console.log("exited gamePersistence");
+  },
+  render: function (display) {
+    console.log("rendered gamePersistence");
+    display.drawText(5,6,"S to save, L to load, N for a new game");
+  },
+  handleInput: function (inputType,inputData) {
+    console.log("input for gamePersistence");
+    if (inputData.charCode !== 0) { // ignore the various modding keys - control, shift, etc.
       Game.switchUIMode(Game.UIMode.gamePlay);
     }
   }

@@ -50,10 +50,8 @@ var Game = {
   _curUIMode: null,
   
   init: function() {
-    this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    this.setRandomSeed(5 + Math.floor(Math.random()*100000));
     //this._randomSeed = 76250;
-    console.log("using random seed "+this._randomSeed);
-    ROT.RNG.setSeed(this._randomSeed);
 
     for (var display_key in this.display) {
       this.display[display_key].o = new ROT.Display({
@@ -65,6 +63,15 @@ var Game = {
     // console.dir(this.display);
     
     this.renderAll();
+  },
+
+  setRandomSeed: function(s) {
+    this._randomSeed = s;
+    console.log("using random seed "+this._randomSeed);
+    ROT.RNG.setSeed(this._randomSeed);
+  },
+  getRandomSeed: function() {
+    return this._randomSeed;
   },
 
   eventHandler: function(eventType, evt) {
