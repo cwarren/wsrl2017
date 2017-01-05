@@ -22,6 +22,7 @@ window.onload = function() {
         bindEventToScreen('keydown');
         
         Game.switchUIMode(Game.UIMode.gameStart);
+        Game.Message.send("Game started");
     }
 };
 
@@ -94,12 +95,9 @@ var Game = {
     if (this._curUIMode) {
       this._curUIMode.render(this.getDisplay("main"));
     }
-    // var d = this.getDisplay("main");
-    // d.drawText(5,5,"main display");
   },
   renderMessage: function() {
-    var d = this.getDisplay("message");
-    d.drawText(1,1,"message display");
+    Game.Message.render(this.getDisplay("message"));
   },
   
   
