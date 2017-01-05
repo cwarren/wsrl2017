@@ -38,7 +38,7 @@ Game.UIMode.gamePersistence = {
 
     if (inputType == 'keypress') {
       if (((inputData.key == 's') || (inputData.key == 'S')) && (inputData.shiftKey)) {
-        // console.dir(JSON.stringify(Game.theGame));
+        // console.log(JSON.stringify(Game.theGame));
         if (this.localStorageAvailable()) {
           window.localStorage.setItem(Game.PERSISTANCE_NAMESPACE, JSON.stringify(Game.theGame)); // .toJSON()
           Game.switchUIMode(Game.UIMode.gamePlay);
@@ -87,6 +87,7 @@ Game.UIMode.gamePlay = {
     console.log("rendered gamePlay");
     display.drawText(5,5,"game play mode");
     display.drawText(5,7,"W to win, L to lose, anything else to keep on keeping on");
+    display.drawText(5,9,"= to save, load, or start over");
   },
   handleInput: function (inputType,inputData) {
     console.log("input for gamePlay");
@@ -98,6 +99,9 @@ Game.UIMode.gamePlay = {
       }
       else if (((inputData.key == 'l') || (inputData.key == 'L')) && (inputData.shiftKey)) {
         Game.switchUIMode(Game.UIMode.gameLose);
+      }
+      else if (inputData.key == '=') {
+        Game.switchUIMode(Game.UIMode.gamePersistence);
       }
     }
   }
